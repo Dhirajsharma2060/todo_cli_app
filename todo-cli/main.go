@@ -26,15 +26,21 @@ func main() {
 
 	//[0]  [1] [2]
 	//main.go add/list/completed
-	todos := todo.Todos{}
+	// todos := todo.Todos{}
+	todos, err := todo.LoadFile("todo.json")
+	if err != nil {
+		fmt.Println("Error loading todos:", err)
+		return
+	}
 	switch command {
 	case "add":
 		desciption := os.Args[2]
 		todos.Add(desciption)
+		todo.SaveFile("todo.json", todos)
 	case "list":
 		todos.List()
 	case "completed", "delete":
-		ID, err := strconv.Atoi(os.Args[3])
+		ID, err := strconv.Atoi(os.Args[2])
 		if err != nil {
 			fmt.Printf("The argument after the %s should be integer ", command)
 		}
@@ -43,6 +49,7 @@ func main() {
 		} else {
 			todos.Delete(ID)
 		}
+		todo.SaveFile("todo.json", todos)
 	}
 
 }
