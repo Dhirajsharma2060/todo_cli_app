@@ -57,15 +57,6 @@ func (todos *Todos) List() {
 
 }
 
-func (todos *Todos) IsOperationAllowed(id int) bool {
-	for _, todo := range *todos {
-		if todo.ID == id {
-			return !todo.Completed
-		}
-	}
-	return false
-}
-
 func (todos *Todos) Delete(id int) error {
 	for i, todo := range *todos {
 		if todo.ID == id {
@@ -81,9 +72,6 @@ func (todos *Todos) Delete(id int) error {
 }
 
 func (todos *Todos) StatusChange(id int) error {
-	if !todos.IsOperationAllowed(id) {
-		return fmt.Errorf("operation not allowed for todo with ID %d", id)
-	}
 	for i, todo := range *todos {
 		if todo.ID == id {
 			(*todos)[i].Completed = true
